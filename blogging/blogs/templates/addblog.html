@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block css %}
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
+<style>
+  body {
+    background-color: #f1f1f1;
+  }
+
+  .form-label {
+    font-weight: bold;
+  }
+
+  .form-control {
+    border-radius: 10px;
+    border: 1px solid #ccc;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+    border-radius: 10px;
+    padding: 10px 20px;
+    font-weight: bold;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+
+  .form-check-input {
+    margin-right: 10px;
+  }
+
+  .form-row {
+    margin-bottom: 20px;
+  }
+
+  .form-row label {
+    margin-bottom: 5px;
+  }
+
+  .form-check-label {
+    font-weight: normal;
+  }
+
+  .form-group {
+    margin-bottom: 20px;
+  }
+
+  .grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+  }
+</style>
+{% endblock %}
+
+{% block body %}
+<div class="container">
+  <form class="grid-container" method="POST" action="">
+      {% csrf_token %}
+        <div class="form-group">
+          <label for="author_name" class="form-label" >author name</label>
+          <input type="text" class="form-control" placeholder="author name to displayed over blog" id="author_name" name="author_name">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="blog_title" class="form-label">Title</label>
+          <input type="text" class="form-control" id="blog_title" name="blog_title">
+        </div>
+        <div class="form-group">
+          <label for="info_bar" class="form-label">Info section</label>
+          <input type="text" class="form-control" id="info_bar" name="info_bar" placeholder="overview of blog">
+        </div>
+        <br>
+        <br>
+        <div class="form-group">
+          <label for="blog_content" class="form-label">Blog Content</label>
+          <input type="text" class="form-control" id="blog_content" name="blog_content" placeholder="write down whole blog body here...">
+        </div>
+        <br>
+        <div class="form-group">
+          <label for="blog_category" class="form-label">Category of blog:</label>
+          <select id="blog_category" name="blog_category" class="form-control">
+            <option >Random Blogs</option>
+            <option >Sports Blogs</option>
+            <option >Travel Blogs</option>
+            <option >Food Blogs</option>
+            <option >Health and Fitness Blogs</option>
+            <option >Personal Blogs</option>
+          </select>
+        </div>
+        <br>
+        <br>
+        <div class="form-group">
+            <input type="submit" value="Submit" class="btn btn-primary">
+
+        </div>
+  </form>
+</div>
+{% endblock %}

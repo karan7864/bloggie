@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Blog</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"> <!-- Link to Bootstrap CSS -->
+    <style>
+        /* Customize the styles as needed */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f1f1f1;
+            margin: 0;
+            padding: 0;
+        }
+
+        .header {
+            background-color: #007bff;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .blog-post {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+
+        .blog-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+        .comment-title {
+            font-size: 28px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 15px;
+        }
+
+        .blog-info-bar {
+            background-color: #17a2b8;
+            color: #fff;
+            border-radius: 50px;
+            padding: 5px 15px;
+            display: inline-block;
+            font-size: 14px;
+            margin-bottom: 15px;
+        }
+
+        .circular-info-bar {
+            border-radius: 50%;
+            width: 100px;
+            height: 100px;
+            background-color: #007bff;
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 16px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+
+        .blog-content {
+            line-height: 1.6;
+        }
+
+        /* Custom styles for the legend and fieldset */
+        legend {
+            font-size: 18px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 10px;
+        }
+
+        fieldset {
+            border: 2px solid #007bff;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        /* Additional styles for comments section */
+        .comments-section {
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 1px solid #ccc;
+        }
+
+        .comments-header {
+            font-size: 24px;
+            font-weight: bold;
+            color: #007bff;
+            margin-bottom: 20px;
+        }
+
+        .comment-item {
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #f7f7f7;
+        }
+
+        .comment-text {
+            margin-bottom: 10px;
+        }
+
+        .comment-author {
+            font-size: 16px;
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .comment-date {
+            font-size: 14px;
+            color: #888;
+        }
+
+        .comment-actions {
+            margin-top: 10px;
+        }
+
+        .comment-actions button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 5px 10px;
+            margin-right: 10px;
+            cursor: pointer;
+        }
+
+        .comment-actions button:hover {
+            background-color: #0056b3;
+        }
+
+        .comment-likes {
+            color: green;
+            margin-right: 10px;
+        }
+
+        .comment-dislikes {
+            color: red;
+        }
+
+        .add-comment {
+            margin-top: 30px;
+        }
+
+        .add-comment textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            resize: vertical;
+        }
+
+        .add-comment button {
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+
+        .add-comment button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>My Blog</h1>
+    </header>
+
+    <main class="container">
+        <section>
+            {% if blog %}
+
+                <div class="blog-post">
+                    <h2 class="blog-title">{{ blog.title }}</h2>
+                    <fieldset>
+                        <legend>Info Bar</legend>
+                        {{ blog.info_bar }}
+                    </fieldset>
+                    <p class="blog-content">{{ blog.content }}</p>
+                </div>
+
+                <div class="comments-section">
+                    <h3 class="comments-header">Comments</h3>
+                    {% if comments %}
+                        {% for comment in comments %}
+                            <div class="comment-item">
+                                <div class="comment-text">{{ comment.text }}</div>
+                                <div class="comment-author">{{ comment.author }}</div>
+                                <div class="comment-date">{{ comment.pub_date|date:"F d, Y" }}</div>
+                                <div class="comment-actions">
+                {% if user.is_authenticated %}
+                  {% if comment.user_reaction.user == user %}
+                    {% if comment.user_reaction.reaction %}
+                      <button onclick="dislikeComment({{ comment.id }})" disabled>Dislike</button>
+                      <button onclick="likeComment({{ comment.id }})">Like</button>
+                    {% else %}
+                      <button onclick="likeComment({{ comment.id }})" disabled>Like</button>
+                      <button onclick="dislikeComment({{ comment.id }})">Dislike</button>
+                    {% endif %}
+                  {% else %}
+                    <button onclick="likeComment({{ comment.id }})">Like</button>
+                    <button onclick="dislikeComment({{ comment.id }})">Dislike</button>
+                  {% endif %}
+                {% else %}
+                  <!-- Show login or register link -->
+                  <a href="{% url 'login' %}">Login to Like/Dislike</a>
+                {% endif %}
+                <span>Likes: {{ comment.likes }}</span>
+                <span>Dislikes: {{ comment.dislikes }}</span>
+                                    {% for comment in comments %}
+
+                {% endfor %}
+
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No comments yet.</p>
+                    {% endif %}
+
+                    <div class="add-comment">
+                        <p class="comment-title">{{username}}, would you like to add a Comment</p>
+                        <form method="post">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit">Submit</button>
+                        </form>
+                    </div>
+                </div>
+
+            {% else %}
+                <p>No blog posts available.</p>
+            {% endif %}
+        </section>
+    </main>
+
+
+
+</body>
+<!--<script >-->
+<!--    function likeComment(commentId) {-->
+<!--      // Send an AJAX request to the Django view with the comment ID-->
+<!--      $.post("{% url 'like_comment' comment.id %}", function(data) {-->
+<!--        // Update the UI with the new like count received in the JSON response-->
+<!--        $("#likes_" + commentId).text(data.likes);-->
+<!--      });-->
+<!--    }-->
+
+<!--</script>-->
+</html>

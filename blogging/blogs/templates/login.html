@@ -1,0 +1,171 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{%block css%}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"> <!-- Link to Bootstrap CSS -->
+
+    <style>
+
+        /* Custom styles for the login page */
+        html, body {
+            background-size: cover;
+            background-repeat: no-repeat;
+            height: 100%;
+            font-family: 'Numans', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        .basic {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        .sign-up {
+            color: #FFC312;
+        }
+
+        .sign-up:hover {
+            color: #c29307;
+        }
+
+        .bg {
+            background: url('/static/images/loan.jpg');
+            width: 100%;
+            height: 100%;
+        }
+
+        .container {
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .card {
+            width: 400px;
+            background-color: rgba(0, 0, 0, 0.8) !important;
+            color: white;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+        }
+
+        .card-header h3 {
+            color: #FFC312;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-control {
+            border-radius: 5px;
+            border: 2px solid #FFC312;
+            padding: 12px;
+            font-size: 16px;
+            background-color: transparent;
+            color: white;
+            outline: none;
+            width: 90%;
+        }
+
+        .form-control:focus {
+            border-color: #FFC312;
+            box-shadow: 0 0 0 3px rgba(255, 195, 18, 0.2);
+        }
+
+        .login_btn {
+            color: black;
+            background-color: #FFC312;
+            width: 100%;
+            border: none;
+            border-radius: 5px;
+            padding: 15px 0;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        .login_btn:hover {
+            background-color: #dda808;
+        }
+
+        .forgot-password {
+            color: #FFC312;
+            cursor: pointer;
+            font-weight: bold;
+            text-decoration: none;
+            text-align: center;
+            display: block;
+            margin-top: 10px;
+        }
+
+        .forgot-password:hover {
+            color: #dda808;
+        }
+
+        .d-flex.justify-content-center.links.basic {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .d-flex.justify-content-center.links.basic a {
+            margin-left: 4px;
+            color: #FFC312;
+            text-decoration: none;
+        }
+
+        .d-flex.justify-content-center.links.basic a:hover {
+            color: #dda808;
+        }
+
+    </style>
+{%endblock%}
+{%block body%}
+{% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info mt-0 mb-0 alert-dismissible fade show" style="padding-top: 10px;" role="alert" id="message">
+        {{ message }}
+        <button type="button" class="close" style="padding-top: 10px;" data-dismiss="alert" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    {% endfor %}
+{% endif %}
+<body>
+
+
+<div class="bg">
+    <div class="container">
+        <div class="card">
+            <div class="card-header">
+                <h3>Sign In</h3>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Email" name="email">
+                    </div>
+                    <div class="form-group">
+                        <input type="password" class="form-control" placeholder="Password" name="password">
+                    </div>
+                    <div class="form-group">
+                        <input type="submit" value="Login" class="login_btn">
+                    </div>
+                </form>
+                <a class="forgot-password" href="{% url 'registration_form' %}">Forgot Password?</a>
+            </div>
+            <div class="card-footer">
+                <div class="d-flex justify-content-center links basic">
+                    Don't have an account?<a href="{% url 'registration_form' %}" class="basic sign-up">Sign Up</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+{%endblock%}}
